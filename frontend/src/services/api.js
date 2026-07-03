@@ -1,77 +1,41 @@
-const API_URL = 'http://localhost:3000'; // Default backend URL
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export const equipamentoService = {
-    listar: async () => {
-        const response = await fetch(`${API_URL}/equipamentos`);
-        if (!response.ok) throw new Error('Erro ao listar equipamentos');
-        const data = await response.json();
-        return { data };
-    },
-    criar: async (equipamento) => {
-        const response = await fetch(`${API_URL}/equipamentos`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(equipamento)
-        });
-        if (!response.ok) throw new Error('Erro ao criar equipamento');
-        const data = await response.json();
-        return { data };
-    }
+const getFromStorage = (key) => {
+    const data = localStorage.getItem(key);
+    if (data) return JSON.parse(data);
+
+    // Initial mock data for demonstration
+    const initialData = {
+        'equipamentos': [{ id: '1', nome: 'Escavadeira Hidráulica', setor: 'Extração' }, { id: '2', nome: 'Caminhão Fora de Estrada', setor: 'Transporte' }],
+        'funcionarios': [{ id: '1', nome: 'Carlos Silva', cargo: 'Operador de Máquinas' }, { id: '2', nome: 'Ana Souza', cargo: 'Engenheira de Minas' }],
+        'cidades': [{ id: '1', nome: 'Belo Horizonte', estado: 'MG' }, { id: '2', nome: 'Parauapebas', estado: 'PA' }],
+        'servicos': [{ id: '1', nome: 'Manutenção Preventiva', valor: '5000' }, { id: '2', nome: 'Inspeção de Segurança', valor: '2500' }]
+    };
+    
+    const initial = initialData[key] || [];
+    localStorage.setItem(key, JSON.stringify(initial));
+    return initial;
 };
 
-export const cidadeService = {
-    listar: async () => {
-        const response = await fetch(`${API_URL}/cidades`);
-        if (!response.ok) throw new Error('Erro ao listar cidades');
-        const data = await response.json();
-        return { data };
-    },
-    criar: async (cidade) => {
-        const response = await fetch(`${API_URL}/cidades`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(cidade)
-        });
-        if (!response.ok) throw new Error('Erro ao criar cidade');
-        const data = await response.json();
-        return { data };
-    }
-};
+const saveToStorage = (key, data) => localStorage.setItem(key, JSON.stringify(data));
 
-export const funcionarioService = {
+const mockService = (key) => ({
     listar: async () => {
-        const response = await fetch(`${API_URL}/funcionarios`);
-        if (!response.ok) throw new Error('Erro ao listar funcionarios');
-        const data = await response.json();
-        return { data };
+        await delay(300);
+        return { data: getFromStorage(key) };
     },
-    criar: async (funcionario) => {
-        const response = await fetch(`${API_URL}/funcionarios`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(funcionario)
-        });
-        if (!response.ok) throw new Error('Erro ao criar funcionario');
-        const data = await response.json();
-        return { data };
+    criar: async (item) => {
+        await delay(300);
+        const data = getFromStorage(key);
+        const newItem = { ...item, id: Date.now().toString() };
+        data.push(newItem);
+        saveToStorage(key, data);
+        return { data: newItem };
     }
-};
+});
 
-export const servicoService = {
-    listar: async () => {
-        const response = await fetch(`${API_URL}/servicos`);
-        if (!response.ok) throw new Error('Erro ao listar servicos');
-        const data = await response.json();
-        return { data };
-    },
-    criar: async (servico) => {
-        const response = await fetch(`${API_URL}/servicos`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(servico)
-        });
-        if (!response.ok) throw new Error('Erro ao criar servico');
-        const data = await response.json();
-        return { data };
-    }
-};
+export const equipamentoService = mockService('equipamentos');
+export const cidadeService = mockService('cidades');
+export const funcionarioService = mockService('funcionarios');
+export const servicoService = mockService('servicos');
+
