@@ -24,7 +24,7 @@ export default function Menu({ setPagina }) {
                     gap: '8px'
                 }}
             >
-                💎 Mineradora
+                Mineradora
             </div>
             
             <div style={{ display: 'flex', gap: '5px' }}>

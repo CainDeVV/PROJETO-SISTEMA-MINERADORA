@@ -4,7 +4,6 @@ const getFromStorage = (key) => {
     const data = localStorage.getItem(key);
     if (data) return JSON.parse(data);
 
-    // Initial mock data for demonstration
     const initialData = {
         'equipamentos': [{ id: '1', nome: 'Escavadeira Hidráulica', setor: 'Extração' }, { id: '2', nome: 'Caminhão Fora de Estrada', setor: 'Transporte' }],
         'funcionarios': [{ id: '1', nome: 'Carlos Silva', cargo: 'Operador de Máquinas' }, { id: '2', nome: 'Ana Souza', cargo: 'Engenheira de Minas' }],

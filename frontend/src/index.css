@@ -102,7 +102,6 @@ hr {
   margin: 20px 0;
 }
 
-/* Form boxes / Cards (targets the inline styles from the original code) */
 div[style*="border: 1px solid #ccc"] {
   border: 1px solid #334155 !important;
   background-color: #0f172a !important;
